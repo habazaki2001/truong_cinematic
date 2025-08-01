@@ -9,7 +9,7 @@ const PhimContext = createContext();
 
 export const usePhim = () => useContext(PhimContext);
 
-export const API_URL = 'http://localhost:4400';
+export const API_URL = 'https://truong-cinematic.vercel.app/';
 
   export const PhimProvider = ({ children }) => {
       const [phim, setPhim] = useState([]);
