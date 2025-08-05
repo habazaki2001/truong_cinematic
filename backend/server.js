@@ -306,25 +306,70 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 // 🔹 Cấu hình lưu ảnh avatar vào thư mục uploads/
-const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Tạo tên file theo thời gian
+// const storage = multer.diskStorage({
+//   destination: "uploads/",
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + path.extname(file.originalname)); // Tạo tên file theo thời gian
+//   },
+// });
+// const upload = multer({ storage });
+
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+// Cấu hình Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Cấu hình multer để upload trực tiếp lên Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "avatars", // Thư mục trên Cloudinary
+    allowed_formats: ["jpg", "png", "jpeg"],
   },
 });
+
 const upload = multer({ storage });
 
+
+
 // ==================== ĐĂNG KÝ =====================
+// app.post("/auth/register", upload.single("avatar"), async (req, res) => {
+//   try {
+//     const { username, email, password } = req.body;
+//     const avatar = req.file ? `/uploads/${req.file.filename}` : "/uploads/default.jpg"; // Nếu không có ảnh, dùng mặc định
+
+//     const existingUserEmail = await User.findOne({ email });
+//     if (existingUserEmail) return res.status(400).json({ message: "Email đã được sử dụng" });
+
+//     const existingUsernam = await User.findOne({ username });
+//     if (existingUsernam) return res.status(400).json({ message: "username đã được sử dụng" });
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+//     const newUser = new User({ username, email, password: hashedPassword, avatar });
+//     await newUser.save();
+
+//     res.status(201).json({ message: "Đăng ký thành công!", avatar });
+//   } catch (error) {
+//     console.error("Lỗi đăng ký:", error);
+//     res.status(500).json({ message: "Lỗi server" });
+//   }
+// });
+
 app.post("/auth/register", upload.single("avatar"), async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    const avatar = req.file ? `/uploads/${req.file.filename}` : "/uploads/default.jpg"; // Nếu không có ảnh, dùng mặc định
+    const avatar = req.file?.path || ""; // Cloudinary trả về URL trong req.file.path
 
     const existingUserEmail = await User.findOne({ email });
     if (existingUserEmail) return res.status(400).json({ message: "Email đã được sử dụng" });
 
-    const existingUsernam = await User.findOne({ username });
-    if (existingUsernam) return res.status(400).json({ message: "username đã được sử dụng" });
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) return res.status(400).json({ message: "Username đã được sử dụng" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ username, email, password: hashedPassword, avatar });
@@ -336,6 +381,7 @@ app.post("/auth/register", upload.single("avatar"), async (req, res) => {
     res.status(500).json({ message: "Lỗi server" });
   }
 });
+
 
 app.use("/uploads", express.static("uploads"));
 

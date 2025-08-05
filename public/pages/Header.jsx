@@ -32,7 +32,7 @@ export default function Header() {
             {!isAuthenticated() ? (
                   <p className='avt_login'><FontAwesomeIcon icon="fa-solid fa-user" /></p>
               ) : (
-                  <p className="avt_login"><img src={`${API_URL}${user?.avatar}`} alt="Avatar" className="user_avatar" /></p>
+                  <p className="avt_login"><img src={`${user?.avatar}`} alt="Avatar" className="user_avatar" /></p>
             )}
             <motion.div 
               className="sub_login"

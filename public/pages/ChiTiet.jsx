@@ -128,7 +128,7 @@ export default function ChiTiet() {
                                     <div className="tab_content" id="tab03" style={{ display: activeTab === "tab03" ? "block" : "none" }}>
                                         <div className="box_comment">
                                             <div className="user_cmt">
-                                                <p className="avt" style={{padding: userAvt ? "0" : "10px"}}><img width="40" height='40' src={`${API_URL}${userAvt}` || <FontAwesomeIcon icon="fa-solid fa-user"/> } alt="Avatar"/></p>
+                                                <p className="avt" style={{padding: userAvt ? "0" : "10px"}}><img width="40" height='40' src={`${userAvt}` || <FontAwesomeIcon icon="fa-solid fa-user"/> } alt="Avatar"/></p>
                                                 <div className="txt_cmt">
                                                     <textarea
                                                       placeholder="Nhập bình luận..."
@@ -146,7 +146,7 @@ export default function ChiTiet() {
                                             <ul className="list_cmt">
                                                 {comments.map((cmt, index) => (
                                                   <li key={index} className="item">
-                                                    <p className="avt" style={{padding: cmt.avt ? "0" : "10px"}}><img width="40" height='40' src={`${API_URL}${cmt.avt}` || <FontAwesomeIcon icon="fa-solid fa-user"/> } alt="Avatar"/></p>
+                                                    <p className="avt" style={{padding: cmt.avt ? "0" : "10px"}}><img width="40" height='40' src={`${cmt.avt}` || <FontAwesomeIcon icon="fa-solid fa-user"/> } alt="Avatar"/></p>
                                                       <p className="des">{cmt.cmt}</p>
                                                   </li>
                                                 ))}
