@@ -9,7 +9,7 @@ const PhimContext = createContext();
 
 export const usePhim = () => useContext(PhimContext);
 
-export const API_URL = '/api/getMovies';
+export const API_URL = 'https://truong-cinematic.vercel.app/api/getMovies';
 
   export const PhimProvider = ({ children }) => {
       const [phim, setPhim] = useState([]);
@@ -17,7 +17,7 @@ export const API_URL = '/api/getMovies';
       useEffect(() => {
         setTimeout(() => {
           axios
-              .get(`${API_URL}/phim`)
+              .get(`${API_URL}/`)
               .then((response) => {setPhim(response.data);setLoading(false);})
               .catch((error) => {console.error("Lỗi khi lấy dữ liệu:", error, error.message); setLoading(false)});
         }, 500);
