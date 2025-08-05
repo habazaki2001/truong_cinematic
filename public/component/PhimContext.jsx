@@ -17,7 +17,7 @@ export const API_URL = 'https://truong-cinematic.vercel.app/api/getMovies';
       useEffect(() => {
         setTimeout(() => {
           axios
-              .get(`${API_URL}`)
+              .get(`${API_URL}/phim`)
               .then((response) => {setPhim(response.data);setLoading(false);})
               .catch((error) => {console.error("Lỗi khi lấy dữ liệu:", error, error.message); setLoading(false)});
         }, 500);
